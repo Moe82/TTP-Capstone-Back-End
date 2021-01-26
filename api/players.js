@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Player } = require('../db/models');
+const {Player} = require('../db/models');
 
 // Express Routes for Players - Read more on routing at https://expressjs.com/en/guide/routing.html
 router.get('/', async (req, res, next) => {

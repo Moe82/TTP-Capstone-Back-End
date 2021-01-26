@@ -3,7 +3,9 @@ const router = require('express').Router();
 
 // Mounts players api calls from api file on /api/players
 router.use('/players', require('./players'));
-
+router.use('/students', require('./students'));
+router.use('/courses', require('./Courses'));
+router.use('/teachers', require('./teachers'));
 //Anythingn not found gets a 404
 router.use((req, res, next) => {
   const error = new Error('Not Found');

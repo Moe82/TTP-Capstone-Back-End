@@ -14,15 +14,15 @@ const seedTeacher = [
 ];
 
 const seedStudent = [
-  { Id: 234, name: 'jeremy becker' },
-  { Id: 345, name: 'Franko' },
-  { Id: 786, name: 'Alseny' },
+  { name: 'jeremy becker' },
+  { name: 'Franko' },
+  { name: 'Alseny' },
 ];
 
 const seedCourse = [
-  { Id: 2345, name: 'Math' },
-  { Id: 7899, name: 'Machine learning' },
-  { Id: 08634, name: 'Anthropology' },
+  { name: 'Math' },
+  { name: 'Machine learning' },
+  { name: 'Anthropology' },
 ];
 
 const seed = async () => {

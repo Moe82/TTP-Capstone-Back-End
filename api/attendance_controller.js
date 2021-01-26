@@ -2,16 +2,16 @@ const express = require('express');
 const router = express.Router();
 const fileUpload = require('express-fileupload');
 const axios = require('axios')
-const dotenv = require('dotenv')
+const dotenv = require('dotenv').config()
 
 router.post('/', async (request, response, nextMiddleware) => {  
-  const imgToBase64 = response.body.imgToBase64  
+  const imgToBase64 = request.body.imgToBase64  
   try {
-    const base64ToText = await axios.post(`https://vision.googleapis.com/v1/images:annotate?key=${API_KEY}`,{
+    const base64ToText = await axios.post(`https://vision.googleapis.com/v1/images:annotate?key=${process.env.API_KEY}`,{
       "requests": [
         {
           "image": {
-            "content": imgTobase64
+            "content": imgToBase64
           },
           "features": [
             {

@@ -7,11 +7,12 @@ const path = require('path');
 const seed = require('./seed')
 
 //IMPORTS/VARIABLES
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8096;
 const db = require('./db');
 
 const app = express();
-
+app.use(express.json())
+app.use(express.urlencoded())
 //CORS!
 app.use(cors());
 

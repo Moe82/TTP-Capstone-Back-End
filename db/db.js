@@ -3,10 +3,12 @@ const { name } = require('../package.json');
 
 // Initialize database with Sequelize
 const db = new Sequelize(
-  process.env.DATABASE_URL || `postgres://localhost:5432/${name}`,
+  process.env.DATABASE_URL || `postgres://postgres:Vinckspostgresql1@localhost:5432/${name}`,
   {
     logging: false,
   }
 );
+
+
 
 module.exports = db;

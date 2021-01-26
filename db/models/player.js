@@ -20,4 +20,58 @@ const Player = db.define('player', {
   },
 });
 
-module.exports = Player;
+
+
+// Model of Teacher
+
+const Teacher = db.define('Teacher', {
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  email: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  Password: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  }
+});
+
+
+// Model of Student
+
+const Student = db.define('Student',  {
+  Id : {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
+  name : {
+    type: Sequelize.STRING,
+    allowNull: false
+  }
+});
+
+// Model of Course
+
+const Course = db.define('Course', {
+  Id : {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
+  name: {
+    type: Sequelize.STRING,
+    allowNull: true
+  }
+
+});
+
+
+
+module.exports = {
+  Player, 
+  Teacher,
+  Student,
+  Course
+};

@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const compression = require('compression');
 const cors = require('cors');
 const path = require('path');
+const seed = require('./seed')
 
 //IMPORTS/VARIABLES
 const PORT = process.env.PORT || 8080;
@@ -28,7 +29,18 @@ const serverRun = () => {
 // {force:true} - drops current tables and places new empty tables
 //{alter:true} - This checks what is the current state of the table in the database (which columns it has, what are their data types, etc), and then performs the necessary changes in the table to make it match the model.
 
-const syncDb = () => db.sync();
+//const syncDb = () => db.sync({force:true});
+const syncDb = () => {
+  if (process.env.NODE_ENV === 'production') {
+    db.sync();
+  }
+  else {
+    console.log('As a reminder, the forced synchronization option is on');
+    db.sync({ force: true })
+      .then(() => seed())
+      .catch(err => console.log(err));
+    }
+};
 // Connects to //postgres://localhost:5432/dbname
 
 //Run server and sync DB

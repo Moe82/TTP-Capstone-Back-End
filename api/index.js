@@ -6,6 +6,8 @@ router.use('/players', require('./players'));
 router.use('/students', require('./students'));
 router.use('/courses', require('./Courses'));
 router.use('/teachers', require('./teachers'));
+router.use('/students/attendance', require('./attendance_controller'));
+
 //Anythingn not found gets a 404
 router.use((req, res, next) => {
   const error = new Error('Not Found');

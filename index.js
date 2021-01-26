@@ -1,21 +1,30 @@
 //NODE MODULES
 const express = require('express');
-const morgan = require('morgan');
-const compression = require('compression');
 const cors = require('cors');
 const path = require('path');
 const seed = require('./seed')
+const fileUpload = require('express-fileupload');
 
 //IMPORTS/VARIABLES
 const PORT = process.env.PORT || 8096;
 const db = require('./db');
 
 const app = express();
+app.use(express.json({
+  limit: "50mb"
+}));
 app.use(express.json())
+
 app.use(express.urlencoded())
 //CORS!
 app.use(cors());
 
+
+
+app.use(express.urlencoded());
+app.use(fileUpload({
+  createParentPath: true
+}));
 //Mount on API
 app.use('/api', require('./api'));
 
@@ -44,8 +53,6 @@ const syncDb = () => {
 };
 // Connects to //postgres://localhost:5432/dbname
 
-//Run server and sync DB
-syncDb();
 serverRun();
 
 module.exports = app;

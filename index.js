@@ -1,16 +1,17 @@
-//NODE MODULES
-require('dotenv').config()
+const passport = require("passport");
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const seed = require('./seed')
 const fileUpload = require('express-fileupload');
+const authRouter = require("./auth");
 
 //IMPORTS/VARIABLES
-const PORT = process.env.PORT || 8099;
+const PORT = process.env.PORT || 8190;
 const db = require('./db');
 
 const app = express();
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }))
 app.use(express.json({
   limit: "50mb"
 }));
@@ -18,8 +19,21 @@ app.use(express.json())
 
 app.use(express.urlencoded())
 //CORS!
-app.use(cors());
 
+passport.serializeUser((user, done) => done(null, user.id));
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await db.models.user.findByPk(id);
+    done(null, user);
+  }
+  catch (err) {
+    done(err);
+  }
+});
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use("/auth", authRouter);
 
 
 app.use(express.urlencoded());

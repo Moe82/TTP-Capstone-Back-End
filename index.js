@@ -1,4 +1,5 @@
 //NODE MODULES
+require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -6,7 +7,7 @@ const seed = require('./seed')
 const fileUpload = require('express-fileupload');
 
 //IMPORTS/VARIABLES
-const PORT = process.env.PORT || 8096;
+const PORT = process.env.PORT || 8099;
 const db = require('./db');
 
 const app = express();
@@ -53,6 +54,7 @@ const syncDb = () => {
 };
 // Connects to //postgres://localhost:5432/dbname
 
+syncDb();
 serverRun();
 
 module.exports = app;

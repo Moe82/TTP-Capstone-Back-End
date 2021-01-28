@@ -52,7 +52,7 @@ const syncDb = () => {
     }
 };
 // Connects to //postgres://localhost:5432/dbname
-
+syncDb();
 serverRun();
 
 module.exports = app;

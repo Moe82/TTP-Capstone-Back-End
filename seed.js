@@ -17,6 +17,9 @@ const seedStudent = [
   { name: 'jeremy becker' },
   { name: 'Franko' },
   { name: 'Alseny' },
+  { name: 'bouba sow' },
+  { name: 'alpha jallo' },
+  { name: 'MOHAMMED SHAFEE' }
 ];
 
 const seedCourse = [

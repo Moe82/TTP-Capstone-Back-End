@@ -2,6 +2,7 @@ const  Teacher= require('./Teacher');
 const Course = require('./Course');
 const Student = require('./Student');
 const Player = require('./player');
+const Attendance = require('./Attendance');
 
 //ASSOICATIONS GO HERE -- Read more at https://sequelize.org/master/manual/assocs.html
 
@@ -14,5 +15,6 @@ module.exports = {
   Player, 
   Teacher,
   Student,
-  Course
+  Course,
+  Attendance
 };

@@ -12,16 +12,13 @@ const levenshtein = require('./levenshtein');
 findClosestMatch = async (posts) => {
   let arr = []
   let studentsTable = await models.Student.findAll();      //["mohased shale", "thierno souleymane ", "justinwui"]   //await models.Student.findAll();
-      console.log(" database "+studentsTable)
+      
     posts.forEach(post =>{
       studentsTable.forEach(item =>{
         if(levenshtein(post.toLowerCase(), item.name.toLowerCase()) <= 2) arr.push(item.name)
       })
     })
 
-
-  console.log(arr)
-  console.log("hello");
    return arr
 }
 
@@ -42,12 +39,14 @@ router.post('/', async (request, response, nextMiddleware) => {
         }
       ]
     })
-    //let post = ["Mohased shalee", "Thierno SOULEYMANE ", "JustinwuI"]
-    //let database = 
+    
       const data = base64ToText.data.responses[0].textAnnotations[0].description
     const students = data.split("\n")
-    console.log(students)
-     findClosestMatch(students);
+    const arr= await findClosestMatch(students) ;
+    
+    models.Attendance.create({studentPresents:arr});
+
+
 }catch(error){
   console.log(error)
 }

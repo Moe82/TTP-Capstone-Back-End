@@ -38,7 +38,7 @@ Teacher.encryptPassword = function(plainText, salt) {
 };
 
 Teacher.prototype.correctPassword = function(candidatePwd) {
-  return User.encryptPassword(candidatePwd, this.salt()) === this.password();
+  return Teacher.encryptPassword(candidatePwd, this.salt()) === this.password();
 };
 
 const setSaltAndPassword = teacher => {

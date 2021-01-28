@@ -2,7 +2,6 @@ const router = require('express').Router();
 
 
 // Mounts players api calls from api file on /api/players
-router.use('/players', require('./players'));
 router.use('/students', require('./students'));
 router.use('/courses', require('./Courses'));
 router.use('/teachers', require('./teachers'));

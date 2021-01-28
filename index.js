@@ -7,7 +7,7 @@ const fileUpload = require('express-fileupload');
 const authRouter = require("./auth");
 
 //IMPORTS/VARIABLES
-const PORT = process.env.PORT || 8096;
+const PORT = process.env.PORT || 8190;
 const db = require('./db');
 
 const app = express();

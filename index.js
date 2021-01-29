@@ -7,7 +7,7 @@ const fileUpload = require('express-fileupload');
 const authRouter = require("./auth");
 
 //IMPORTS/VARIABLES
-const PORT = process.env.PORT || 8190;
+const PORT = process.env.PORT || 8096;
 const db = require('./db');
 
 const app = express();
@@ -61,8 +61,8 @@ const syncDb = () => {
   }
   else {
     console.log('As a reminder, the forced synchronization option is on');
-    db.sync({ force: true })
-      .then(() => seed())
+    db.sync({alter:true})
+      //.then(() => seed())
       .catch(err => console.log(err));
     }
 };

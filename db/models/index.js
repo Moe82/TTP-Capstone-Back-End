@@ -10,6 +10,7 @@ Course.belongsTo(Teacher);
 Course.hasMany(Student);
 Student.belongsTo(Course);
 
+
 module.exports = {
   Teacher,
   Student,

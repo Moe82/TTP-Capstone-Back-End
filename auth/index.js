@@ -47,8 +47,29 @@ router.delete("/logout", (req, res, next) => {
   });
 });
 
+
 router.get("/me", (req, res) => {
+  console.log(req.params)
   res.json(req.teacher);
 });
 
+
+
 module.exports = router;
+
+
+
+
+// /auth/teacher/id
+// {
+//   teacher: {
+//     course: {
+//       1:
+//       {
+//         attendance{
+//           1/1: ["mohamed", "sadio",]
+//         }
+//       }
+//     }
+//   }
+// }

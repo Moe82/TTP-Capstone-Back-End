@@ -5,9 +5,13 @@ const { Course } = require('../db/models');
 
 
 // Routes for Courses
-router.get('/', async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   try {
-    await Course.findAll()
+    await Course.findAll({
+      where:{
+        teacherId: req.params.id
+      }
+    })
       .then(
         response => res.json(response)
       )
@@ -17,18 +21,18 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/:id', async (req, res, next) => {
-  try {
-    await Course.findAll({
-      where: {
-        id: req.params.id
-      }
-    })
-      .then((response) => { res.status(200).json(response) })
-  } catch (err) {
-    console.log(err);
-  }
-})
+// router.get('/:id', async (req, res, next) => {
+//   try {
+//     await Course.findAll({
+//       where: {
+//         id: req.params.id
+//       }
+//     })
+//       .then((response) => { res.status(200).json(response) })
+//   } catch (err) {
+//     console.log(err);
+//   }
+// })
 
 router.put('/edit/:id', async (req, res, next) => {
   try {
@@ -43,9 +47,9 @@ router.put('/edit/:id', async (req, res, next) => {
 
 
 router.post('/', async (req, res, next) => {
-
   await Course.create({
-    name: req.body.name
+    name: req.body.formValues.name,
+    teacherId: req.body.teacherId
   })
 
     .then(course => res.status(200).json(course))
@@ -56,9 +60,19 @@ router.post('/', async (req, res, next) => {
 })
 
 router.delete('/delete/:id', async (req, res, next) => {
+  console.log("deleting", req.params.id)
   try {
-    const data = await Course.findByPk(req.params.id);
-    await data.destroy();
+    const data = await Course.findByPk(req.params.id)
+    .then(course => {
+      if (!course) {
+        return res.status(404).json({
+          message: "course not found"
+        })
+      } 
+      course.destroy();
+      res.status(200)
+      .json(course)
+    })
   } catch (err) {
     console.log(err);
   }

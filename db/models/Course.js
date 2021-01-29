@@ -6,7 +6,7 @@ const db = require('../db');
 const Course = db.define('Course', {
     name: {
       type: Sequelize.STRING,
-      allowNull: true
+      allowNull: false
     }
   });
 

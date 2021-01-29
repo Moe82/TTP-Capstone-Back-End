@@ -1,5 +1,6 @@
 const passport = require("passport");
 const express = require('express');
+
 const cors = require('cors');
 const path = require('path');
 const seed = require('./seed')
@@ -33,6 +34,8 @@ passport.deserializeUser(async (id, done) => {
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+app.use('/api', require('./api'));
 app.use("/auth", authRouter);
 
 
@@ -41,7 +44,7 @@ app.use(fileUpload({
   createParentPath: true
 }));
 //Mount on API
-app.use('/api', require('./api'));
+
 
 //START BACKEND SERVER FUNCTIOON
 const serverRun = () => {
@@ -65,6 +68,7 @@ const syncDb = () => {
       .then(() => seed())
       .catch(err => console.log(err));
     }
+    
 };
 // Connects to //postgres://localhost:5432/dbname
 

@@ -47,10 +47,12 @@ router.post('/', async (request, response, nextMiddleware) => {
     let students = ["jeremy becker", "Frankyyy", "Alsenio", "Baaba sssaww"]
     console.log("Original students:\n", students)
     const matches = await findMatches(students)
-    console.log(models.students)
+    
   } catch(error) {
     console.log(error)
   }
 })
+
+
 
 module.exports = router;

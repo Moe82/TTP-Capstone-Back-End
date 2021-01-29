@@ -9,8 +9,8 @@ const models = require('../db/models')
 const levenshtein = require('./levenshtein');
 
 findMatches = async (students) => {
-  let studentsTable = await models.Student.findAll(); 
   var arr = []
+  let studentsTable = await models.Student.findAll(); 
   students.forEach(student =>{
     studentsTable.forEach(entry =>{
       if (levenshtein(student.toLowerCase(), entry.dataValues.name.toLowerCase()) <= 2) arr.push(entry.dataValues.name)
@@ -41,11 +41,13 @@ router.post('/', async (request, response, nextMiddleware) => {
     // const data = base64ToText.data.responses[0].textAnnotations[0].description
     // const students = data.split("\n")
     // console.log(students)
+
+
+    // test data
     let students = ["jeremy becker", "Frankyyy", "Alsenio", "Baaba sssaww"]
     console.log("Original students:\n", students)
     const matches = await findMatches(students)
-    console.log(matches)
-
+    console.log(models.students)
   } catch(error) {
     console.log(error)
   }

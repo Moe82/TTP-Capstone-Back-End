@@ -64,8 +64,8 @@ const syncDb = () => {
   }
   else {
     console.log('As a reminder, the forced synchronization option is on');
-    db.sync({ force: true })
-      .then(() => seed())
+    db.sync({alter:true})
+      //.then(() => seed())
       .catch(err => console.log(err));
     }
     

@@ -22,34 +22,34 @@ findMatches = async (students, courseNumber) => {
 }
 
 router.post('/', async (request, response, nextMiddleware) => {  
-  const imgToBase64 = request.body.imgToBase64  
+  // const imgToBase64 = request.body.imgToBase64  
   try {
-    const base64ToText = await axios.post(`https://vision.googleapis.com/v1/images:annotate?key=${process.env.API_KEY}`,{
-      "requests": [
-        {
-          "image": {
-            "content": imgToBase64
-          },
-          "features": [
-            {
-              "type": "TEXT_DETECTION"
-            }
-          ]
-        }
-      ]
-    })
-    const data = base64ToText.data.responses[0].textAnnotations[0].description
-    const students = data.split("\n")
-    const courseNumber = request.body.id
-    const matches = await findMatches(students, courseNumber)
-    models.Attendance.findAll({where: {CourseId: request.body.date}})
-    .then(attendanceSheets => {
-      for (let attendanceSheet of attendanceSheets){
-        if (attendanceSheet.date == request.body.date) {
-          attendanceSheet.destroy();
-        }
-      }
-    })
+    // const base64ToText = await axios.post(`https://vision.googleapis.com/v1/images:annotate?key=${process.env.API_KEY}`,{
+    //   "requests": [
+    //     {
+    //       "image": {
+    //         "content": imgToBase64
+    //       },
+    //       "features": [
+    //         {
+    //           "type": "TEXT_DETECTION"
+    //         }
+    //       ]
+    //     }
+    //   ]
+    // })
+    // const data = base64ToText.data.responses[0].textAnnotations[0].description
+    // const students = data.split("\n")
+    // const courseNumber = request.body.id
+    // const matches = await findMatches(students, courseNumber)
+    // models.Attendance.findAll({where: {CourseId: request.body.date}})
+    // .then(attendanceSheets => {
+    //   for (let attendanceSheet of attendanceSheets){
+    //     if (attendanceSheet.date == request.body.date) {
+    //       attendanceSheet.destroy();
+    //     }
+    //   }
+    // })
     models.Attendance.create({
       studentsPresent: matches,
       CourseId:courseNumber,
@@ -60,31 +60,51 @@ router.post('/', async (request, response, nextMiddleware) => {
   }
 })
 
+// Super hackey and complicated, but it works...
 router.get('/', async (req, res, next)=>{
-  let attendanceSheetObject = {}
   try {
-    await models.Attendance.findAll({
+    let attendanceSheetObject = {data: {}}
+    await models.Student.findAll({
       where: {
         CourseId: req.body.courseId
       }
-    })
-    .then(
-      async attendanceSheet => {
-        await models.Student.findAll({
-          where: {
-            CourseId: req.body.courseId
+    }).then(async allStudents => {
+      for (student of allStudents){
+        attendanceSheetObject.data[student.dataValues.name] = {}
+        }
+        
+      await models.Attendance.findAll({
+        where: {
+          CourseId: req.body.courseId
+        }
+      })
+      .then(
+        async attendanceSheets => {
+          for (let attendanceSheet of attendanceSheets) {
+            let date = attendanceSheet.date
+            for (student of Object.keys(attendanceSheetObject.data)){
+              if (!(date in Object.keys(student))) {
+                attendanceSheetObject.data[student][date] = "absent"
+              }
+            }
+            
           }
-        }).then( allStudents => {
-          for (let student of allStudents){
-            console.log(entry.dataValues)
-            console.log("___________________")
+          for (let student of Object.keys(attendanceSheetObject.data)){
+            for (let attendanceSheet of attendanceSheets) {
+              const objectArray = Object.entries(attendanceSheet.studentsPresent)
+              objectArray.forEach(([key, value]) => {
+                if (student == value){
+                  attendanceSheetObject.data[student][attendanceSheet.date] = "present"
+                }
+              });
+            }
           }
-        })
-        res.status(200).json(campus)
-      }
-      ).catch(err => res.json(err))
+          res.status(200).json(attendanceSheetObject)
+        }
+      ) 
+    }).catch(err => res.json(err))
   } catch (error) {
-  console.log(error);
+    console.log(error);
   }
 })
 

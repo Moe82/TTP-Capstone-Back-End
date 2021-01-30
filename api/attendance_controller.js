@@ -11,7 +11,6 @@ const levenshtein = require('./levenshtein');
 findMatches = async (students, courseNumber) => {
   var arr = []
   let studentsTable = await models.Student.findAll({where: {CourseId:courseNumber}}); 
-  console.log("Students:",students)
   students.forEach(student =>{
     studentsTable.forEach(entry =>{
       if (levenshtein(student.toLowerCase(), entry.dataValues.name.toLowerCase()) <= 3) {
@@ -42,11 +41,11 @@ router.post('/', async (request, response, nextMiddleware) => {
     const data = base64ToText.data.responses[0].textAnnotations[0].description
    
     const students = data.split("\n")
-    console.log("Google", students)
+  
     const courseNumber = request.body.id
-    console.log("coursenumber:", courseNumber)
+  
     const matches = await findMatches(students, courseNumber)
-    console.log("_____MATCHES____", matches)
+  
     await models.Attendance.create({
       studentsPresent: matches,
       CourseId:courseNumber
@@ -58,10 +57,25 @@ router.post('/', async (request, response, nextMiddleware) => {
 
 router.get('/', async (req, res, next)=>{
   try {
-    await models.Attendance.findAll()
+    await models.Attendance.findAll({
+      where: {
+        CourseId: req.body.courseId
+      }
+    })
     .then(
-      response => res.json(response)
-    )
+      async attendanceSheet => {
+        let allStudents = await models.Student.findAll({
+          where: {
+            CourseId: req.body.courseId
+          }
+        }).then()
+        let attendance = {}
+        for (entry in attendance){
+          console.log(entry)
+          console.log("___________________")
+        }
+      }
+      ).catch(err => res.json(response))
   } catch (error) {
     console.log(error);
   }

@@ -3,9 +3,10 @@ const router = require('express').Router();
 
 // Mounts players api calls from api file on /api/players
 router.use('/students', require('./students'));
+router.use('/students/attendance', require('./attendance_controller'));
 router.use('/courses', require('./Courses'));
 router.use('/teachers', require('./teachers'));
-router.use('/students/attendance', require('./attendance_controller'));
+
 
 //Anythingn not found gets a 404
 router.use((req, res, next) => {

@@ -35,17 +35,11 @@ router.post("/signup", async (req, res, next) => {
   }
 });
 
-router.delete("/logout", (req, res, next) => {
-  req.logout();
-  req.session.destroy((err) => {
-    if (err) {
-      return next(err);
-    }
-    else {
-      res.status(204).end();
-    }
+
+  router.get('/logout', function (req, res) {
+    req.logout();
+    req.session = null; 
   });
-});
 
 
 router.get("/me", (req, res) => {
@@ -56,20 +50,3 @@ router.get("/me", (req, res) => {
 
 
 module.exports = router;
-
-
-
-
-// /auth/teacher/id
-// {
-//   teacher: {
-//     course: {
-//       1:
-//       {
-//         attendance{
-//           1/1: ["mohamed", "sadio",]
-//         }
-//       }
-//     }
-//   }
-// }

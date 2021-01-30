@@ -8,6 +8,10 @@ const Attendance = db.define('attendance', {
     type: Sequelize.ARRAY(Sequelize.STRING),
     allowNull: true,
   },
+  date: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  }
 });
  
 module.exports = Attendance;

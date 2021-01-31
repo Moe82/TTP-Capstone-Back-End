@@ -22,38 +22,40 @@ findMatches = async (students, courseNumber) => {
 }
 
 router.post('/', async (request, response, nextMiddleware) => {  
-  // const imgToBase64 = request.body.imgToBase64  
+  const imgToBase64 = request.body.imgToBase64  
   try {
-    // const base64ToText = await axios.post(`https://vision.googleapis.com/v1/images:annotate?key=${process.env.API_KEY}`,{
-    //   "requests": [
-    //     {
-    //       "image": {
-    //         "content": imgToBase64
-    //       },
-    //       "features": [
-    //         {
-    //           "type": "TEXT_DETECTION"
-    //         }
-    //       ]
-    //     }
-    //   ]
-    // })
-    // const data = base64ToText.data.responses[0].textAnnotations[0].description
-    // const students = data.split("\n")
-    // const courseNumber = request.body.id
-    // const matches = await findMatches(students, courseNumber)
-    // models.Attendance.findAll({where: {CourseId: request.body.date}})
-    // .then(attendanceSheets => {
-    //   for (let attendanceSheet of attendanceSheets){
-    //     if (attendanceSheet.date == request.body.date) {
-    //       attendanceSheet.destroy();
-    //     }
-    //   }
-    // })
+    const base64ToText = await axios.post(`https://vision.googleapis.com/v1/images:annotate?key=${process.env.API_KEY}`,{
+      "requests": [
+        {
+          "image": {
+            "content": imgToBase64
+          },
+          "features": [
+            {
+              "type": "TEXT_DETECTION"
+            }
+          ]
+        }
+      ]
+    })
+    const data = base64ToText.data.responses[0].textAnnotations[0].description
+    const students = data.split("\n")
+    const courseNumber = request.body.id
+    const matches = await findMatches(students, courseNumber)
+    models.Attendance.findAll({where: {CourseId: request.body.id}})
+    .then(attendanceSheets => {
+      for (let attendanceSheet of attendanceSheets){
+        if (attendanceSheet.date == request.body.date) {
+          attendanceSheet.destroy();
+        }
+      }
+    })
+    console.log("type:", typeof request.body.date )
+    console.log(request.body.date )
     models.Attendance.create({
       studentsPresent: matches,
       CourseId:courseNumber,
-      date: request.body.date 
+      date: "asd"
     })
   } catch(error) {
     console.log(error)

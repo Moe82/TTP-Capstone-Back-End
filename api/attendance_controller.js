@@ -23,8 +23,10 @@ findMatches = async (students, courseNumber) => {
 }
 
 router.post('/', async (request, response, nextMiddleware) => {  
-  console.log(request.body.date)
-  const imgToBase64 = request.body.imgToBase64  
+  console.log("Request date:", request.body.date)
+  console.log("base64:", request.body.imgToBase64)
+  console.log(process.env.API_KEY)
+  const imgToBase64 = request.body.imgToBase64
   try {
     const base64ToText = await axios.post(`https://vision.googleapis.com/v1/images:annotate?key=${process.env.API_KEY}`,{
       "requests": [

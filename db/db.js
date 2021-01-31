@@ -13,4 +13,4 @@ const database = new Sequelize(process.env.DATABASE_URL, {
   }
 })
 
-module.exports = db;
+module.exports = database;

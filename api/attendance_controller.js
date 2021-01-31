@@ -57,8 +57,10 @@ router.post('/', async (request, response, nextMiddleware) => {
       CourseId:courseNumber,
       date: "asd"
     })
+    console.log(matches)
+    response.status(200).json(matches)
   } catch(error) {
-    console.log(error)
+    response.status(400).json(error)
   }
 })
 
@@ -89,7 +91,6 @@ router.get('/', async (req, res, next)=>{
                 attendanceSheetObject.data[student][date] = "absent"
               }
             }
-            
           }
           for (let student of Object.keys(attendanceSheetObject.data)){
             for (let attendanceSheet of attendanceSheets) {

@@ -6,18 +6,19 @@ const path = require('path');
 const seed = require('./seed')
 const fileUpload = require('express-fileupload');
 const authRouter = require("./auth");
+const db = require('./db');
+
 
 //IMPORTS/VARIABLES
 const PORT = process.env.PORT || 5000;
-const db = require('./db');
+
 
 const app = express();
-app.use(cors({ credentials: true }))
+app.use(cors({ credentials: true, origin: 'https://attendance-tracker.netlify.app'}))
 
 app.use(express.json({
   limit: "50mb"
 }));
-app.use(express.json())
 
 app.use(express.urlencoded())
 //CORS!

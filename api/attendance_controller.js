@@ -7,13 +7,14 @@ const models = require('../db/models')
 
 // importing the Levenshtein algo to calculate the Levenshtein distance between names in table and names from API 
 const levenshteinDistance = require('./levenshtein');
+const { request } = require('express');
 
 findMatches = async (students, courseNumber) => {
   var arr = []
   let studentsTable = await models.Student.findAll({where: {CourseId:courseNumber}}); 
   students.forEach(student =>{
     studentsTable.forEach(entry =>{
-      if (levenshteinDistance(student.toLowerCase(), entry.dataValues.name.toLowerCase()) <= 3) {
+      if (levenshteinDistance(student.toLowerCase(), entry.dataValues.name.toLowerCase()) <= 2) {
         arr.push(entry.dataValues.name)
       }
     })
@@ -22,6 +23,7 @@ findMatches = async (students, courseNumber) => {
 }
 
 router.post('/', async (request, response, nextMiddleware) => {  
+  console.log(request.body.date)
   const imgToBase64 = request.body.imgToBase64  
   try {
     const base64ToText = await axios.post(`https://vision.googleapis.com/v1/images:annotate?key=${process.env.API_KEY}`,{
@@ -55,7 +57,7 @@ router.post('/', async (request, response, nextMiddleware) => {
     models.Attendance.create({
       studentsPresent: matches,
       CourseId:courseNumber,
-      date: "asd"
+      date: request.body.date
     })
     console.log(matches)
     response.status(200).json(matches)
@@ -65,21 +67,23 @@ router.post('/', async (request, response, nextMiddleware) => {
 })
 
 // Super hackey and complicated, but it works...
-router.get('/', async (req, res, next)=>{
+router.get('/:id', async (req, res, next)=>{
+  console.log("GET for id:", req.params.id)
   try {
     let attendanceSheetObject = {data: {}}
     await models.Student.findAll({
       where: {
-        CourseId: req.body.courseId
+        CourseId: req.params.id
       }
     }).then(async allStudents => {
+      
       for (student of allStudents){
         attendanceSheetObject.data[student.dataValues.name] = {}
         }
         
       await models.Attendance.findAll({
         where: {
-          CourseId: req.body.courseId
+          CourseId: req.params.id
         }
       })
       .then(

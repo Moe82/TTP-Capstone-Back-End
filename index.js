@@ -8,11 +8,11 @@ const fileUpload = require('express-fileupload');
 const authRouter = require("./auth");
 
 //IMPORTS/VARIABLES
-const PORT = process.env.PORT || 8190;
+const PORT = process.env.PORT || 5000;
 const db = require('./db');
 
 const app = express();
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }))
+app.use(cors({ credentials: true }))
 app.use(express.json({
   limit: "50mb"
 }));

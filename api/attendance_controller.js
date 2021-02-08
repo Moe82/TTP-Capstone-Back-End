@@ -23,8 +23,9 @@ findMatches = async (students, courseNumber) => {
 }
 
 router.post('/', async (request, response, nextMiddleware) => {  
-  for (let imgInBase64 of request.body.imagesInBase64) {
-    try {
+  try {
+    for (let imgInBase64 of request.body.imagesInBase64) {
+      console.log("HERE", imgInBase64.length)
       const base64ToText = await axios.post(`https://vision.googleapis.com/v1/images:annotate?key=${process.env.API_KEY}`,{
         "requests": [
           {
@@ -44,6 +45,7 @@ router.post('/', async (request, response, nextMiddleware) => {
       data.shift()
       students = data
       const courseNumber = request.body.id
+      console.log("API results:", students)
       const matches = await findMatches(students, courseNumber)
       console.log("Matches:", matches)
       models.Attendance.findAll({where: {CourseId: request.body.id}})
@@ -59,11 +61,11 @@ router.post('/', async (request, response, nextMiddleware) => {
         CourseId:courseNumber,
         date: date
       })
-      response.status(200).json(matches)
-    } catch(error) {
-      response.status(400).json(error)
-      console.log(error)
     }
+      response.status(200).json("Success")
+  } catch(error) {
+    response.status(400).json(error)
+    console.log(error)
   }
 })
 

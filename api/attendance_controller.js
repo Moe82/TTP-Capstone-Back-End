@@ -14,7 +14,7 @@ findMatches = async (students, courseNumber) => {
   let studentsTable = await models.Student.findAll({where: {CourseId:courseNumber}}); 
   students.forEach(student =>{
     studentsTable.forEach(entry =>{
-      if (levenshteinDistance(student.toLowerCase(), entry.dataValues.name.toLowerCase()) <= 2) {
+      if (levenshteinDistance(student.toLowerCase(), entry.dataValues.name.toLowerCase()) <= 3) {
         arr.push(entry.dataValues.name)
       }
     })
@@ -23,52 +23,52 @@ findMatches = async (students, courseNumber) => {
 }
 
 router.post('/', async (request, response, nextMiddleware) => {  
-  console.log("Request date:", request.body.date)
-  const imgToBase64 = request.body.imgToBase64
-  try {
-    const base64ToText = await axios.post(`https://vision.googleapis.com/v1/images:annotate?key=${process.env.API_KEY}`,{
-      "requests": [
-        {
-          "image": {
-            "content": imgToBase64
-          },
-          "features": [
-            {
-              "type": "TEXT_DETECTION"
-            }
-          ]
+  for (let imgInBase64 of request.body.imagesInBase64) {
+    try {
+      const base64ToText = await axios.post(`https://vision.googleapis.com/v1/images:annotate?key=${process.env.API_KEY}`,{
+        "requests": [
+          {
+            "image": {
+              "content": imgInBase64
+            },
+            "features": [
+              {
+                "type": "TEXT_DETECTION"
+              }
+            ]
+          }
+        ]
+      })
+      const data = base64ToText.data.responses[0].textAnnotations[0].description.split("\n")
+      let date = data[0]
+      data.shift()
+      students = data
+      const courseNumber = request.body.id
+      const matches = await findMatches(students, courseNumber)
+      console.log("Matches:", matches)
+      models.Attendance.findAll({where: {CourseId: request.body.id}})
+      .then(attendanceSheets => {
+        for (let attendanceSheet of attendanceSheets){
+          if (attendanceSheet.date == date) {
+            attendanceSheet.destroy();
+          }
         }
-      ]
-    })
-    const data = base64ToText.data.responses[0].textAnnotations[0].description
-    const students = data.split("\n")
-    const courseNumber = request.body.id
-    const matches = await findMatches(students, courseNumber)
-    models.Attendance.findAll({where: {CourseId: request.body.id}})
-    .then(attendanceSheets => {
-      for (let attendanceSheet of attendanceSheets){
-        if (attendanceSheet.date == request.body.date) {
-          attendanceSheet.destroy();
-        }
-      }
-    })
-    console.log("type:", typeof request.body.date )
-    console.log(request.body.date )
-    models.Attendance.create({
-      studentsPresent: matches,
-      CourseId:courseNumber,
-      date: request.body.date
-    })
-    console.log(matches)
-    response.status(200).json(matches)
-  } catch(error) {
-    response.status(400).json(error)
+      })
+      models.Attendance.create({
+        studentsPresent: matches,
+        CourseId:courseNumber,
+        date: date
+      })
+      response.status(200).json(matches)
+    } catch(error) {
+      response.status(400).json(error)
+      console.log(error)
+    }
   }
 })
 
 // Super hackey and complicated, but it works...
 router.get('/:id', async (req, res, next)=>{
-  console.log("GET for id:", req.params.id)
   try {
     let attendanceSheetObject = {data: {}}
     await models.Student.findAll({
@@ -106,6 +106,7 @@ router.get('/:id', async (req, res, next)=>{
               });
             }
           }
+          // sortAttendanceSheetObject(attendanceSheetObject)
           res.status(200).json(attendanceSheetObject)
         }
       ) 
@@ -114,5 +115,16 @@ router.get('/:id', async (req, res, next)=>{
     console.log(error);
   }
 })
+
+// sorts the attendance object by date. 
+// sortAttendanceSheetObject = (attendaceObject) => {
+//   const objectArray = Object.entries(attendaceObject.data)
+//   objectArray.forEach(([key, value]) => {
+//     const dates = Object.entries(value)
+//     for (let date of dates){ 
+//       console.log(key,date[0]) 
+//     }
+//   })
+// }
 
 module.exports = router;

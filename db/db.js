@@ -4,16 +4,16 @@ require('dotenv').config()
 // Initialize database with Sequelize
 
 
-const db = new Sequelize( process.env.DATABASE_URL,
+const db = new Sequelize( process.env.DATABASE_URL || `postgres://postgres:${process.env.DB_PASS}@localhost:5432/${name}` ,
   {
     dialet: 'postgres',
     protocol: 'postgres',
-    dialectOptions: {
-      ssl: {
-        sslmode: 'require',
-        rejectUnauthorized: false
-      }
-    }
+    // dialectOptions: {
+    //   ssl: {
+    //     sslmode: 'require',
+    //     rejectUnauthorized: false
+    //   }
+    // }
   }
 );
 

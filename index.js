@@ -10,11 +10,11 @@ const db = require('./db');
 
 
 //IMPORTS/VARIABLES
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 
 
 const app = express();
-app.use(cors({ credentials: true, origin: 'https://attendance-tracker.netlify.app'}))
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }))
 
 app.use(express.json({
   limit: "50mb"

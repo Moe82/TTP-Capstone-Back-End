@@ -1,15 +1,6 @@
-  <h1 align="center">TTP Backend Template</h1>
+  <h1 align="center">Attendance Tracker Backend</h1>
 
-  <p align="center">
-    Everything important to guide you to set up and get your backend server running and serving routes
-    <br />
-    <br />
-    <!-- ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a> -->
-  </p>
-</p>
+
 
 <!-- TABLE OF CONTENTS -->
 <details open="open">
@@ -28,7 +19,6 @@
       </ul>
     </li>
     <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
 
   </ol>
 </details>
@@ -90,11 +80,3 @@ To get a local copy up and running follow these simple example steps.
 ## License
 
 Distributed under the ISC License.
-
-<!-- CONTACT -->
-
-## Contact
-
-Depak Borhara - [@dborhara](https://twitter.com/Dborhara) - depakborhara@gmail.com
-
-Project Link: [https://github.com/DBorhara/ttp-backend-scaffold](https://github.com/DBorhara/ttp-backend-scaffold)

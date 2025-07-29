@@ -4,7 +4,8 @@
   "description": "Attendance tracker backend server",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "dev": "nodemon index.js" 
   },
   "author": "Mohamed Shafee",
   "license": "ISC",

@@ -5,6 +5,8 @@ require('dotenv').config();
 
 const isProd = !!process.env.DATABASE_URL;
 
+console.log('DATABASE_URL:', process.env.DATABASE_URL);
+
 const db = new Sequelize(
   process.env.DATABASE_URL || `postgres://postgres:${process.env.DB_PASS}@localhost:5432/${name}`,
   {

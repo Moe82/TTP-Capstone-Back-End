@@ -8,6 +8,8 @@ const fileUpload = require('express-fileupload');
 const authRouter = require("./auth");
 const db = require('./db');
 
+console.log('DATABASE_URL:', process.env.DATABASE_URL);
+
 // IMPORTS/VARIABLES
 const PORT = process.env.PORT || 8080;
 
